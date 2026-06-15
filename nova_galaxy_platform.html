@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Galaxy — Advanced AI Dev Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   NOVA GALAXY DESIGN SYSTEM
+   Platform: Web · Mobile · Games
+   ══════════════════════════════════════════════ */
+:root {
+  /* Core palette */
+  --ink:       #09090E;
+  --ink-dim:   #1C1C28;
+  --ink-muted: #2E2E42;
+  --surface-0: #0D0D18;
+  --surface-1: #111120;
+  --surface-2: #181828;
+  --surface-3: #1F1F35;
+  --border:    rgba(255,255,255,0.07);
+  --border-md: rgba(255,255,255,0.12);
+  --border-hi: rgba(255,255,255,0.22);
+
+  /* Brand */
+  --nova:   #6C63FF;  /* signature violet */
+  --nova-d: #4B44CC;
+  --nova-l: #9C95FF;
+  --cyan:   #22D3EE;
+  --green:  #10B981;
+  --amber:  #F59E0B;
+  --rose:   #F43F5E;
+  --orange: #F97316;
+
+  /* Text */
+  --t1: #F1F1FF;
+  --t2: #A0A0C0;
+  --t3: #606080;
+
+  /* Type */
+  --display: 'Space Grotesk', sans-serif;
+  --body:    'Inter', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+
+  /* Spacing & radius */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px; --r-xl: 24px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--ink); color: var(--t1); font-family: var(--body); font-size: 14px; }
+button { font-family: var(--body); cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: var(--body); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(108,99,255,.35); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--nova); }
+input[type=file] { display: none; }
+
+/* ── NOVA LOGO SVG ── */
+.nova-logo-mark {
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.nova-hex {
+  width: 32px; height: 32px; position: relative; flex-shrink: 0;
+}
+.nova-hex svg { width: 100%; height: 100%; }
+
+/* ── UTILITY ── */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.flex-1 { flex: 1; }
+.w-full { width: 100%; }
+.overflow-hidden { overflow: hidden; }
+.overflow-y { overflow-y: auto; }
+
+/* ══════════════════════════════════════════════
+   SCREEN SYSTEM
+   ══════════════════════════════════════════════ */
+.screen { position: fixed; inset: 0; z-index: 10; opacity: 0; pointer-events: none; transition: opacity .35s ease; display: flex; flex-direction: column; }
+.screen.active { opacity: 1; pointer-events: auto; }
+
+/* ══════════════════════════════════════════════
+   SCREEN 1 — LANDING / WIREFRAME HOME
+   ══════════════════════════════════════════════ */
+#s-landing {
+  background: var(--ink);
+  justify-content: center; align-items: center;
+  overflow-y: auto;
+}
+.landing-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,99,255,.18) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 80% 60%, rgba(34,211,238,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.landing-grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(108,99,255,.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(108,99,255,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.landing-inner { position: relative; z-index: 1; max-width: 1080px; width: 100%; padding: 0 24px; }
+
+/* Top nav */
+.land-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 72px; }
+.land-nav-links { display: flex; gap: 24px; align-items: center; }
+.land-nav-links a { color: var(--t2); font-size: 13px; font-weight: 500; text-decoration: none; transition: color .15s; }
+.land-nav-links a:hover { color: var(--t1); }
+.land-nav-actions { display: flex; gap: 10px; align-items: center; }
+
+/* Hero */
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(108,99,255,.12); border: 1px solid rgba(108,99,255,.3); border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--nova-l); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 24px; }
+.hero-title { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 700; line-height: 1.08; letter-spacing: -.03em; color: var(--t1); margin-bottom: 20px; }
+.hero-title .accent { background: linear-gradient(135deg, var(--nova-l), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 1.05rem; color: var(--t2); line-height: 1.7; max-width: 560px; margin-bottom: 36px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; }
+
+/* Platform cards */
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 64px; }
+.plat-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; transition: border-color .2s, transform .2s; cursor: pointer; }
+.plat-card:hover { border-color: var(--nova); transform: translateY(-2px); }
+.plat-card.active-type { border-color: var(--nova); background: rgba(108,99,255,.08); }
+.plat-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.plat-name { font-family: var(--display); font-weight: 600; font-size: .95rem; color: var(--t1); margin-bottom: 4px; }
+.plat-desc { font-size: .78rem; color: var(--t3); line-height: 1.5; }
+.plat-tag { display: inline-block; margin-top: 8px; font-size: .65rem; padding: 2px 7px; border-radius: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.tag-web { background: rgba(34,211,238,.12); color: var(--cyan); }
+.tag-mobile { background: rgba(16,185,129,.12); color: var(--green); }
+.tag-game { background: rgba(245,158,11,.12); color: var(--amber); }
+.tag-ai { background: rgba(108,99,255,.15); color: var(--nova-l); }
+
+/* Feature strips */
+.feature-strip { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; padding: 32px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 64px; }
+.feat-item { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--t2); }
+.feat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--nova); }
+
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: var(--r-md); font-weight: 600; font-size: .88rem; transition: all .18s; font-family: var(--display); }
+.btn-primary { background: var(--nova); color: #fff; box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+.btn-primary:hover { background: var(--nova-l); box-shadow: 0 0 24px rgba(108,99,255,.4); }
+.btn-ghost { border: 1px solid var(--border-md); color: var(--t2); }
+.btn-ghost:hover { border-color: var(--border-hi); color: var(--t1); background: var(--surface-2); }
+.btn-outline { border: 1px solid var(--nova); color: var(--nova-l); }
+.btn-outline:hover { background: rgba(108,99,255,.1); }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { opacity: .88; }
+.btn-sm { padding: 5px 12px; font-size: .78rem; }
+.btn-xs { padding: 3px 9px; font-size: .7rem; border-radius: var(--r-sm); }
+.btn-danger { background: rgba(244,63,94,.15); color: var(--rose); border: 1px solid rgba(244,63,94,.25); }
+.btn-danger:hover { background: rgba(244,63,94,.25); }
+.btn-icon { width: 30px; height: 30px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: .85rem; border: 1px solid var(--border); color: var(--t2); transition: .15s; }
+.btn-icon:hover { border-color: var(--border-hi); color: var(--t1); background: var(--surface-3); }
+
+/* ══════════════════════════════════════════════
+   SCREEN 2 — AUTH (Login / Register)
+   ══════════════════════════════════════════════ */
+#s-auth {
+  background: var(--ink);
+  justify-content: center; align-items: center;
+}
+.auth-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(108,99,255,.12) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 70% 30%, rgba(34,211,238,.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.auth-split { display: flex; width: 100%; max-width: 900px; min-height: 560px; position: relative; z-index: 1; border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; }
+.auth-left { flex: 1; background: linear-gradient(135deg, var(--surface-1), var(--surface-2)); padding: 48px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--border); }
+.auth-left-title { font-family: var(--display); font-size: 1.6rem; font-weight: 700; color: var(--t1); margin-bottom: 10px; }
+.auth-left-sub { font-size: .88rem; color: var(--t2); line-height: 1.6; }
+.auth-caps { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
+.auth-cap { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--t2); }
+.cap-icon { width: 28px; height: 28px; border-radius: var(--r-sm); background: rgba(108,99,255,.15); border: 1px solid rgba(108,99,255,.25); display: flex; align-items: center; justify-content: center; font-size: .8rem; flex-shrink: 0; }
+.auth-right { width: 400px; background: var(--surface-1); padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+.auth-tab-row { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
+.auth-tab { padding: 8px 16px; font-size: .88rem; font-weight: 600; color: var(--t3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: .15s; }
+.auth-tab.active { color: var(--nova-l); border-bottom-color: var(--nova); }
+.field-label { font-size: .75rem; font-weight: 600; color: var(--t2); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; display: block; }
+.field-input { width: 100%; padding: 9px 12px; background: var(--surface-2); border: 1px solid var(--border-md); border-radius: var(--r-md); color: var(--t1); font-size: .92rem; outline: none; transition: border-color .18s; margin-bottom: 14px; }
+.field-input:focus { border-color: var(--nova); box-shadow: 0 0 0 3px rgba(108,99,255,.12); }
+.auth-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+.auth-divider::before, .auth-divider::after { content:''; flex: 1; height: 1px; background: var(--border); }
+.auth-divider span { font-size: .72rem; color: var(--t3); }
+.google-btn { width: 100%; padding: 9px; background: var(--surface-2); border: 1px solid var(--border-md); border-radius: var(--r-md); color: var(--t1); font-size: .88rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; transition: .18s; }
+.google-btn:hover { border-color: var(--border-hi); background: var(--surface-3); }
+
+/* ══════════════════════════════════════════════
+   SCREEN 3 — DASHBOARD
+   ══════════════════════════════════════════════ */
+#s-dashboard { background: var(--ink); flex-direction: column; }
+.dash-header {
+  height: 52px; background: var(--surface-1); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 20px; gap: 12px; flex-shrink: 0; z-index: 50;
+}
+.dash-search { flex: 1; max-width: 340px; position: relative; }
+.dash-search input { width: 100%; padding: 6px 12px 6px 32px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); color: var(--t1); font-size: .82rem; outline: none; transition: .15s; }
+.dash-search input:focus { border-color: var(--nova); }
+.dash-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--t3); font-size: .75rem; }
+.dash-body { flex: 1; display: flex; overflow: hidden; }
+/* Sidebar */
+.dash-sidebar { width: 220px; background: var(--surface-1); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; padding: 16px 8px; gap: 4px; overflow-y: auto; }
+.dash-sidebar-label { font-size: .65rem; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .8px; padding: 10px 10px 4px; }
+.dash-nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--r-md); font-size: .85rem; color: var(--t2); cursor: pointer; transition: .15s; }
+.dash-nav-item:hover { background: var(--surface-2); color: var(--t1); }
+.dash-nav-item.active { background: rgba(108,99,255,.12); color: var(--nova-l); }
+.dash-nav-item .nav-icon { font-size: .9rem; width: 18px; text-align: center; }
+/* Main */
+.dash-main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+.dash-section-title { font-family: var(--display); font-size: 1.3rem; font-weight: 700; color: var(--t1); margin-bottom: 6px; }
+.dash-section-sub { font-size: .85rem; color: var(--t2); margin-bottom: 24px; }
+.new-proj-banner {
+  background: linear-gradient(135deg, rgba(108,99,255,.15), rgba(34,211,238,.08));
+  border: 1px solid rgba(108,99,255,.25); border-radius: var(--r-lg); padding: 24px 28px;
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+.new-proj-text h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+.new-proj-text p { font-size: .82rem; color: var(--t2); }
+/* Project cards */
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 32px; }
+.proj-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: border-color .18s, transform .18s; }
+.proj-card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+.proj-card-thumb { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; position: relative; overflow: hidden; }
+.proj-card-body { padding: 14px; }
+.proj-card-name { font-family: var(--display); font-weight: 600; font-size: .92rem; color: var(--t1); margin-bottom: 4px; }
+.proj-card-meta { font-size: .75rem; color: var(--t3); display: flex; align-items: center; gap: 8px; }
+.proj-card-tags { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.proj-tag { font-size: .62rem; font-weight: 700; padding: 2px 6px; border-radius: 8px; text-transform: uppercase; letter-spacing: .4px; }
+/* Template library */
+.template-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
+.template-card { flex-shrink: 0; width: 160px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; cursor: pointer; transition: .18s; }
+.template-card:hover { border-color: var(--nova); }
+.template-thumb { height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+.template-name { font-size: .78rem; font-weight: 600; padding: 8px 10px 4px; color: var(--t1); }
+.template-type { font-size: .65rem; color: var(--t3); padding: 0 10px 8px; }
+
+/* ══════════════════════════════════════════════
+   SCREEN 4 — MAIN IDE (3-PANEL)
+   ══════════════════════════════════════════════ */
+#s-ide { background: var(--ink); flex-direction: column; }
+
+/* IDE Top Header */
+.ide-header {
+  height: 48px; background: var(--surface-1); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 12px; gap: 10px; flex-shrink: 0; z-index: 100;
+}
+.ide-logo { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: .95rem; font-weight: 700; color: var(--t1); padding: 4px 10px; border: 1px solid var(--border); border-radius: var(--r-md); cursor: pointer; transition: .15s; }
+.ide-logo:hover { border-color: var(--border-hi); background: var(--surface-2); }
+.project-pill { display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); font-size: .82rem; color: var(--t1); cursor: pointer; }
+.project-pill .proj-type-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* Language & Type selector pills */
+.selector-group { display: flex; gap: 6px; align-items: center; }
+.sel-pill { padding: 4px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; border: 1px solid var(--border); color: var(--t2); cursor: pointer; transition: .15s; display: flex; align-items: center; gap: 4px; }
+.sel-pill:hover { border-color: var(--border-hi); color: var(--t1); }
+.sel-pill.active { border-color: var(--nova); background: rgba(108,99,255,.12); color: var(--nova-l); }
+
+/* Panel toggle */
+.panel-toggles { display: flex; gap: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 3px; }
+.panel-toggle { padding: 4px 10px; border-radius: var(--r-sm); font-size: .72rem; font-weight: 600; color: var(--t3); cursor: pointer; transition: .15s; display: flex; align-items: center; gap: 5px; }
+.panel-toggle:hover { color: var(--t1); }
+.panel-toggle.on { background: var(--nova); color: #fff; }
+
+.ide-header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.status-badge { display: flex; align-items: center; gap: 5px; font-size: .72rem; color: var(--green); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 5px var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+/* IDE Body */
+.ide-body { flex: 1; display: flex; overflow: hidden; }
+
+/* ── PANEL 1: PROMPT ── */
+#panel-prompt {
+  width: 320px; flex-shrink: 0;
+  background: var(--surface-1); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: width .25s ease;
+}
+#panel-prompt.closed { width: 0; }
+.panel-head { height: 38px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.panel-head-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--t3); }
+
+/* Mode tabs inside prompt panel */
+.prompt-mode-tabs { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.pm-tab { flex: 1; padding: 5px; text-align: center; border-radius: var(--r-sm); font-size: .72rem; font-weight: 700; color: var(--t3); cursor: pointer; border: 1px solid transparent; transition: .15s; }
+.pm-tab:hover { color: var(--t1); border-color: var(--border); }
+.pm-tab.active { background: var(--nova); color: #fff; border-color: var(--nova); }
+
+/* Chat messages */
+.chat-msgs { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.cmsg { display: flex; gap: 8px; }
+.cmsg-av { width: 26px; height: 26px; border-radius: var(--r-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; margin-top: 2px; }
+.av-ai { background: rgba(108,99,255,.2); border: 1px solid rgba(108,99,255,.3); color: var(--nova-l); }
+.av-user { background: rgba(34,211,238,.15); border: 1px solid rgba(34,211,238,.25); color: var(--cyan); }
+.cmsg-body { flex: 1; background: var(--surface-2); border: 1px solid var(--border); border-radius: 0 var(--r-md) var(--r-md) var(--r-md); padding: 8px 10px; font-size: .82rem; line-height: 1.6; color: var(--t1); }
+.cmsg-body.user { background: rgba(34,211,238,.06); border-color: rgba(34,211,238,.15); border-radius: var(--r-md) 0 var(--r-md) var(--r-md); }
+.cmsg-body code { font-family: var(--mono); font-size: .75rem; background: var(--surface-3); padding: 1px 4px; border-radius: 3px; color: var(--nova-l); }
+.cmsg-code { font-family: var(--mono); font-size: .75rem; background: var(--ink); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px; margin: 6px 0; overflow-x: auto; white-space: pre; line-height: 1.5; color: var(--t2); }
+.apply-btn { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; padding: 3px 8px; background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25); color: var(--green); border-radius: var(--r-sm); cursor: pointer; margin-top: 4px; transition: .15s; }
+.apply-btn:hover { background: rgba(16,185,129,.2); }
+.typing-ind { display: flex; align-items: center; gap: 4px; color: var(--t3); font-size: .78rem; padding: 4px 0; }
+.tdot { width: 5px; height: 5px; border-radius: 50%; background: var(--nova); animation: tb 1.2s infinite ease; }
+.tdot:nth-child(2){animation-delay:.18s}.tdot:nth-child(3){animation-delay:.36s}
+@keyframes tb{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1);opacity:1}}
+
+/* Agent panel */
+.agent-msgs { flex: 1; overflow-y: auto; padding: 10px; display: none; flex-direction: column; gap: 8px; }
+.agent-step { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 10px; font-size: .8rem; }
+.astep-head { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.astep-badge { font-size: .62rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: .5px; }
+.badge-edit { background: rgba(108,99,255,.15); color: var(--nova-l); }
+.badge-create { background: rgba(16,185,129,.12); color: var(--green); }
+.badge-delete { background: rgba(244,63,94,.12); color: var(--rose); }
+.astep-file { font-family: var(--mono); font-size: .7rem; color: var(--cyan); background: rgba(34,211,238,.08); padding: 1px 6px; border-radius: 4px; }
+.astep-desc { color: var(--t2); line-height: 1.5; }
+.astep-done { color: var(--green); font-size: .7rem; margin-top: 4px; }
+.agent-prog { background: rgba(108,99,255,.08); border: 1px solid rgba(108,99,255,.2); border-radius: var(--r-md); padding: 10px; }
+.ap-label { font-size: .8rem; font-weight: 600; color: var(--nova-l); margin-bottom: 6px; }
+.ap-bar { height: 4px; background: rgba(108,99,255,.15); border-radius: 2px; overflow: hidden; }
+.ap-fill { height: 100%; background: linear-gradient(90deg, var(--nova), var(--cyan)); border-radius: 2px; transition: width .4s; }
+.ap-sub { font-size: .72rem; color: var(--t3); margin-top: 4px; }
+.agent-done { background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.2); border-radius: var(--r-md); padding: 10px; font-size: .8rem; color: var(--t2); }
+
+/* Ctx chips */
+.ctx-bar { padding: 6px 10px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 4px; min-height: 34px; align-items: center; }
+.ctx-c { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; font-size: .68rem; font-weight: 600; cursor: default; }
+.ctx-file { background: rgba(108,99,255,.1); border: 1px solid rgba(108,99,255,.2); color: var(--nova-l); }
+.ctx-img { background: rgba(34,211,238,.1); border: 1px solid rgba(34,211,238,.2); color: var(--cyan); }
+.ctx-rm { opacity:.5; cursor:pointer; } .ctx-rm:hover{opacity:1;}
+
+/* Prompt input */
+.prompt-input-area { padding: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+.prompt-textarea { width: 100%; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); color: var(--t1); font-size: .85rem; padding: 8px 10px; outline: none; resize: none; height: 78px; line-height: 1.55; transition: border-color .18s; }
+.prompt-textarea:focus { border-color: var(--nova); }
+.prompt-actions-row { display: flex; gap: 5px; align-items: center; }
+.pa-icon { width: 28px; height: 28px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--surface-1); color: var(--t2); display: flex; align-items: center; justify-content: center; font-size: .82rem; cursor: pointer; transition: .15s; }
+.pa-icon:hover { border-color: var(--border-hi); color: var(--t1); background: var(--surface-2); }
+.send-btn { margin-left: auto; padding: 5px 14px; background: var(--nova); color: #fff; border-radius: var(--r-sm); font-size: .78rem; font-weight: 700; transition: opacity .15s; display: flex; align-items: center; gap: 4px; }
+.send-btn:hover { opacity: .88; }
+.send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Agent input */
+.agent-input-area { padding: 8px; border-top: 1px solid var(--border); display: none; flex-direction: column; gap: 6px; }
+.agent-textarea { width: 100%; background: var(--surface-2); border: 1px solid rgba(108,99,255,.25); border-radius: var(--r-md); color: var(--t1); font-size: .85rem; padding: 8px 10px; outline: none; resize: none; height: 88px; line-height: 1.55; transition: .18s; }
+.agent-textarea:focus { border-color: var(--nova); box-shadow: 0 0 0 3px rgba(108,99,255,.1); }
+.agent-run { width: 100%; padding: 8px; background: linear-gradient(135deg, var(--nova), #8B5CF6); color: #fff; border-radius: var(--r-md); font-size: .82rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity .15s; }
+.agent-run:hover { opacity: .88; }
+.agent-run:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── PANEL 2: CODE EDITOR ── */
+#panel-code { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--ink); }
+.editor-tabs { height: 36px; display: flex; background: var(--surface-2); border-bottom: 1px solid var(--border); overflow-x: auto; flex-shrink: 0; align-items: stretch; }
+.editor-tabs::-webkit-scrollbar { height: 2px; }
+.etab { display: flex; align-items: center; gap: 6px; padding: 0 14px; font-size: .78rem; color: var(--t3); cursor: pointer; border-right: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; transition: .12s; min-width: 90px; position: relative; }
+.etab:hover { background: var(--surface-1); color: var(--t1); }
+.etab.active { background: var(--ink); color: var(--t1); }
+.etab.active::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--nova); }
+.etab-close { opacity:0; font-size:.7rem; margin-left:auto; padding:1px 4px; border-radius:3px; }
+.etab:hover .etab-close { opacity:.5; }
+.etab-close:hover { opacity:1; background: rgba(255,255,255,.08); }
+.editor-main { flex: 1; display: flex; overflow: hidden; }
+.line-nums { width: 44px; padding: 12px 8px 12px 0; background: var(--surface-1); color: var(--t3); font-family: var(--mono); font-size: 12px; line-height: 1.65; text-align: right; border-right: 1px solid var(--border); flex-shrink: 0; overflow: hidden; user-select: none; }
+#code-editor { flex: 1; padding: 12px; background: var(--ink); border: none; outline: none; resize: none; font-family: var(--mono); font-size: 13px; line-height: 1.65; color: var(--t1); overflow-y: auto; tab-size: 2; white-space: pre; caret-color: var(--nova-l); }
+.editor-statusbar { height: 22px; background: var(--nova); display: flex; align-items: center; padding: 0 12px; gap: 16px; font-size: .7rem; color: rgba(255,255,255,.8); flex-shrink: 0; font-family: var(--mono); }
+.st-item { display: flex; align-items: center; gap: 4px; }
+
+/* Language selector dropdown */
+.lang-select { background: transparent; border: none; color: rgba(255,255,255,.8); font-size: .7rem; outline: none; cursor: pointer; font-family: var(--mono); }
+.lang-select option { background: var(--ink); color: var(--t1); }
+
+/* ── PANEL 3: PREVIEW ── */
+#panel-preview { width: 380px; flex-shrink: 0; background: var(--surface-1); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; transition: width .25s ease; }
+#panel-preview.closed { width: 0; }
+.preview-head { height: 38px; padding: 0 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.preview-url { flex: 1; padding: 4px 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); font-family: var(--mono); font-size: .72rem; color: var(--t2); outline: none; }
+.preview-device-tabs { display: flex; gap: 3px; }
+.dev-tab { padding: 3px 7px; border-radius: var(--r-sm); font-size: .68rem; color: var(--t3); cursor: pointer; transition: .12s; }
+.dev-tab:hover { color: var(--t1); background: var(--surface-3); }
+.dev-tab.active { background: var(--nova); color: #fff; }
+.preview-frame { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--ink); position: relative; }
+.preview-iframe-wrap { width: 100%; height: 100%; background: #fff; transition: all .3s; }
+.preview-iframe-wrap.mobile { width: 375px; height: 667px; border-radius: 20px; overflow: hidden; box-shadow: 0 0 0 8px #1a1a2e, 0 20px 60px rgba(0,0,0,.5); max-height: 90%; }
+#preview-frame { width: 100%; height: 100%; border: none; background: #fff; }
+.preview-status { position: absolute; bottom: 0; left: 0; right: 0; height: 22px; background: rgba(0,0,0,.6); display: flex; align-items: center; padding: 0 10px; font-family: var(--mono); font-size: .65rem; color: var(--t3); gap: 10px; }
+
+/* ══════════════════════════════════════════════
+   NEW PROJECT MODAL
+   ══════════════════════════════════════════════ */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .22s; backdrop-filter: blur(4px); }
+.modal-bg.open { opacity: 1; pointer-events: auto; }
+.modal-box { background: var(--surface-1); border: 1px solid var(--border-md); border-radius: var(--r-xl); padding: 32px; width: 100%; max-width: 560px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.modal-box h2 { font-family: var(--display); font-size: 1.2rem; font-weight: 700; color: var(--t1); margin-bottom: 6px; }
+.modal-sub { font-size: .82rem; color: var(--t2); margin-bottom: 24px; }
+.modal-section-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--t3); margin-bottom: 8px; }
+/* Project type grid */
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+.type-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 12px 8px; text-align: center; cursor: pointer; transition: .18s; }
+.type-card:hover { border-color: var(--border-hi); }
+.type-card.sel { border-color: var(--nova); background: rgba(108,99,255,.1); }
+.type-card-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.type-card-name { font-size: .72rem; font-weight: 600; color: var(--t1); }
+.type-card-sub { font-size: .62rem; color: var(--t3); margin-top: 2px; }
+/* Language pills */
+.lang-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.lang-pill { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--t2); font-size: .75rem; font-weight: 600; cursor: pointer; transition: .15s; display: flex; align-items: center; gap: 5px; }
+.lang-pill:hover { border-color: var(--border-hi); color: var(--t1); }
+.lang-pill.sel { border-color: var(--nova); background: rgba(108,99,255,.12); color: var(--nova-l); }
+.lang-emoji { font-size: .85rem; }
+/* Project name */
+.proj-name-row { display: flex; gap: 8px; align-items: flex-end; }
+.proj-name-input { flex: 1; padding: 9px 12px; background: var(--surface-2); border: 1px solid var(--border-md); border-radius: var(--r-md); color: var(--t1); font-size: .9rem; outline: none; transition: .15s; }
+.proj-name-input:focus { border-color: var(--nova); }
+
+/* ══════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════ */
+#toasts { position: fixed; bottom: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+.toast { background: var(--surface-2); border: 1px solid var(--border-md); border-radius: var(--r-md); padding: 9px 14px; font-size: .82rem; color: var(--t1); display: flex; align-items: center; gap: 8px; animation: tin .25s ease; box-shadow: 0 8px 24px rgba(0,0,0,.4); min-width: 200px; max-width: 320px; }
+.toast.success { border-color: rgba(16,185,129,.35); }
+.toast.error { border-color: rgba(244,63,94,.35); }
+.toast.info { border-color: rgba(108,99,255,.35); }
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Responsive file colors ── */
+.ext-html { color: #F97316; } .ext-css { color: #3B82F6; } .ext-js { color: #EAB308; } .ext-ts { color: #60A5FA; } .ext-json { color: #10B981; } .ext-py { color: #34D399; } .ext-dart { color: #22D3EE; } .ext-swift { color: #F97316; } .ext-kt { color: #A78BFA; } .ext-lua { color: #818CF8; } .ext-gd { color: #4ADE80; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+  NOVA LOGO MARK (reusable SVG inline)
+  A hexagonal orbit ring — Nova's signature
+══════════════════════════════════════ -->
+<template id="tpl-logo">
+  <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="18,2 31,9.5 31,26.5 18,34 5,26.5 5,9.5" stroke="url(#ng)" stroke-width="2" fill="rgba(108,99,255,0.08)"/>
+    <circle cx="18" cy="18" r="5" fill="url(#ng2)"/>
+    <circle cx="18" cy="5" r="2" fill="#6C63FF" opacity=".7"/>
+    <circle cx="29.5" cy="11.5" r="1.5" fill="#22D3EE" opacity=".6"/>
+    <circle cx="29.5" cy="24.5" r="1.5" fill="#22D3EE" opacity=".4"/>
+    <defs>
+      <linearGradient id="ng" x1="5" y1="2" x2="31" y2="34" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#6C63FF"/>
+        <stop offset="1" stop-color="#22D3EE"/>
+      </linearGradient>
+      <linearGradient id="ng2" x1="13" y1="13" x2="23" y2="23" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#9C95FF"/>
+        <stop offset="1" stop-color="#22D3EE"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</template>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1: LANDING
+══════════════════════════════════════ -->
+<div class="screen active" id="s-landing">
+  <div class="landing-bg"></div>
+  <div class="landing-grid"></div>
+  <div class="landing-inner" style="padding-top:20px;padding-bottom:40px;">
+
+    <!-- Nav -->
+    <nav class="land-nav">
+      <div class="nova-logo-mark">
+        <div class="nova-hex"><svg viewBox="0 0 36 36" fill="none"><polygon points="18,2 31,9.5 31,26.5 18,34 5,26.5 5,9.5" stroke="url(#ng)" stroke-width="2" fill="rgba(108,99,255,0.1)"/><circle cx="18" cy="18" r="5" fill="url(#ng2)"/><circle cx="18" cy="5" r="2" fill="#6C63FF" opacity=".7"/><circle cx="29.5" cy="11.5" r="1.5" fill="#22D3EE" opacity=".6"/><defs><linearGradient id="ng" x1="5" y1="2" x2="31" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient><linearGradient id="ng2" x1="13" y1="13" x2="23" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#9C95FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs></svg></div>
+        <span style="font-family:var(--display);font-size:1.1rem;font-weight:700;">Nova Galaxy</span>
+      </div>
+      <div class="land-nav-links">
+        <a href="#">Features</a>
+        <a href="#">Templates</a>
+        <a href="#">Pricing</a>
+        <a href="#">Docs</a>
+        <a href="#">Community</a>
+      </div>
+      <div class="land-nav-actions">
+        <button class="btn btn-ghost btn-sm" onclick="goAuth('login')">Log in</button>
+        <button class="btn btn-primary btn-sm" onclick="goAuth('register')">Start free →</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div style="max-width:700px;">
+      <div class="hero-eyebrow">✦ AI-Powered Dev Platform · Web · Mobile · Games</div>
+      <h1 class="hero-title">Build anything with<br><span class="accent">AI at your side</span></h1>
+      <p class="hero-sub">Nova Galaxy combines the best of Replit, Lovable, Emergent, and Thunkable — one platform to prompt, code, and ship web apps, mobile apps, and games across any language.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="goAuth('register')" style="font-size:.95rem;padding:11px 24px;">Start building free →</button>
+        <button class="btn btn-ghost" onclick="goIDE()" style="font-size:.95rem;padding:11px 24px;">Open IDE demo</button>
+      </div>
+    </div>
+
+    <!-- Feature strip -->
+    <div class="feature-strip">
+      <div class="feat-item"><span class="feat-dot"></span>AI Prompt → Code → Preview</div>
+      <div class="feat-item"><span class="feat-dot"></span>20+ Languages</div>
+      <div class="feat-item"><span class="feat-dot"></span>Web, Mobile & Game Targets</div>
+      <div class="feat-item"><span class="feat-dot"></span>Autonomous Agent Mode</div>
+      <div class="feat-item"><span class="feat-dot"></span>Live Preview & Deploy</div>
+      <div class="feat-item"><span class="feat-dot"></span>Visual Wireframe Builder</div>
+    </div>
+
+    <!-- Platform cards -->
+    <div style="margin-bottom:16px;font-size:.82rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;">What do you want to build?</div>
+    <div class="platform-grid">
+      <div class="plat-card" onclick="selectType('web',this)">
+        <div class="plat-icon">🌐</div>
+        <div class="plat-name">Web App</div>
+        <div class="plat-desc">Full-stack web apps with React, Vue, Next.js, Flask and more</div>
+        <span class="plat-tag tag-web">Web</span>
+      </div>
+      <div class="plat-card" onclick="selectType('mobile',this)">
+        <div class="plat-icon">📱</div>
+        <div class="plat-name">Mobile App</div>
+        <div class="plat-desc">iOS & Android with Flutter, React Native, Swift or Kotlin</div>
+        <span class="plat-tag tag-mobile">Mobile</span>
+      </div>
+      <div class="plat-card" onclick="selectType('game',this)">
+        <div class="plat-icon">🎮</div>
+        <div class="plat-name">Game</div>
+        <div class="plat-desc">2D & 3D games with Unity C#, Godot, Phaser.js or Lua</div>
+        <span class="plat-tag tag-game">Game</span>
+      </div>
+      <div class="plat-card" onclick="selectType('ai',this)">
+        <div class="plat-icon">🤖</div>
+        <div class="plat-name">AI Agent</div>
+        <div class="plat-desc">LLM-powered apps with Python, LangChain, or Node.js APIs</div>
+        <span class="plat-tag tag-ai">AI</span>
+      </div>
+      <div class="plat-card" onclick="selectType('api',this)">
+        <div class="plat-icon">⚡</div>
+        <div class="plat-name">API / Backend</div>
+        <div class="plat-desc">REST APIs, microservices in Python, Go, Rust, Node.js</div>
+        <span class="plat-tag tag-web">Backend</span>
+      </div>
+      <div class="plat-card" onclick="selectType('no-code',this)">
+        <div class="plat-icon">✨</div>
+        <div class="plat-name">No-Code</div>
+        <div class="plat-desc">Prompt-only mode — describe it, Nova builds it entirely</div>
+        <span class="plat-tag tag-ai">AI-Only</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <button class="btn btn-primary" style="font-size:.95rem;padding:11px 28px;" onclick="goAuth('register')">Get started — it's free →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2: AUTH
+══════════════════════════════════════ -->
+<div class="screen" id="s-auth">
+  <div class="auth-bg"></div>
+  <div class="auth-split">
+    <div class="auth-left">
+      <div>
+        <div class="nova-logo-mark" style="margin-bottom:28px;">
+          <div class="nova-hex"><svg viewBox="0 0 36 36" fill="none"><polygon points="18,2 31,9.5 31,26.5 18,34 5,26.5 5,9.5" stroke="url(#ng3)" stroke-width="2" fill="rgba(108,99,255,0.1)"/><circle cx="18" cy="18" r="5" fill="url(#ng4)"/><circle cx="18" cy="5" r="2" fill="#6C63FF" opacity=".7"/><defs><linearGradient id="ng3" x1="5" y1="2" x2="31" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient><linearGradient id="ng4" x1="13" y1="13" x2="23" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#9C95FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs></svg></div>
+          <span style="font-family:var(--display);font-size:1.1rem;font-weight:700;">Nova Galaxy</span>
+        </div>
+        <div class="auth-left-title">The AI dev platform that works like your best engineer</div>
+        <div class="auth-left-sub">Prompt → code → deploy across web, mobile, and games. No setup. No waiting.</div>
+        <div class="auth-caps">
+          <div class="auth-cap"><div class="cap-icon">🌐</div><span>Web apps in any framework</span></div>
+          <div class="auth-cap"><div class="cap-icon">📱</div><span>Mobile apps for iOS & Android</span></div>
+          <div class="auth-cap"><div class="cap-icon">🎮</div><span>Games with Unity, Godot, Phaser</span></div>
+          <div class="auth-cap"><div class="cap-icon">🤖</div><span>Autonomous AI agent mode</span></div>
+          <div class="auth-cap"><div class="cap-icon">👁</div><span>Live 3-panel: Prompt · Code · Preview</span></div>
+        </div>
+      </div>
+      <div style="font-size:.75rem;color:var(--t3);">© 2026 Nova Galaxy · <a href="#" style="color:var(--t3);">Terms</a> · <a href="#" style="color:var(--t3);">Privacy</a></div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-tab-row">
+        <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log in</div>
+        <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Sign up</div>
+      </div>
+      <button class="google-btn" onclick="goDashboard()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="auth-divider"><span>or</span></div>
+      <div id="auth-form-login">
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" id="f-email" placeholder="you@example.com">
+        <label class="field-label">Password</label>
+        <input class="field-input" type="password" id="f-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')goDashboard()">
+        <button class="btn btn-primary w-full" style="width:100%;justify-content:center;" onclick="goDashboard()">Log in →</button>
+        <div style="text-align:center;margin-top:14px;font-size:.78rem;color:var(--t3);">Forgot password? <a href="#" style="color:var(--nova-l);">Reset</a></div>
+      </div>
+      <div id="auth-form-register" class="hidden">
+        <label class="field-label">Full name</label>
+        <input class="field-input" type="text" placeholder="Your name">
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" placeholder="you@example.com">
+        <label class="field-label">Password</label>
+        <input class="field-input" type="password" placeholder="Create a password" onkeydown="if(event.key==='Enter')goDashboard()">
+        <button class="btn btn-primary w-full" style="width:100%;justify-content:center;" onclick="goDashboard()">Create account →</button>
+        <div style="text-align:center;margin-top:14px;font-size:.72rem;color:var(--t3);">By signing up you agree to our <a href="#" style="color:var(--nova-l);">Terms</a></div>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;top:16px;left:20px;z-index:5;">
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-landing')">← Back</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3: DASHBOARD
+══════════════════════════════════════ -->
+<div class="screen" id="s-dashboard">
+  <!-- Header -->
+  <div class="dash-header">
+    <div class="nova-logo-mark" style="cursor:pointer;" onclick="goScreen('s-landing')">
+      <div class="nova-hex" style="width:26px;height:26px;"><svg viewBox="0 0 36 36" fill="none"><polygon points="18,2 31,9.5 31,26.5 18,34 5,26.5 5,9.5" stroke="url(#ng5)" stroke-width="2" fill="rgba(108,99,255,0.1)"/><circle cx="18" cy="18" r="5" fill="url(#ng6)"/><defs><linearGradient id="ng5" x1="5" y1="2" x2="31" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient><linearGradient id="ng6" x1="13" y1="13" x2="23" y2="23"><stop stop-color="#9C95FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs></svg></div>
+      <span style="font-family:var(--display);font-weight:700;font-size:.92rem;">Nova Galaxy</span>
+    </div>
+    <div class="dash-search">
+      <span class="dash-search-icon">🔍</span>
+      <input type="text" placeholder="Search projects, templates…">
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-ghost btn-sm" onclick="openNewProj()">+ New Project</button>
+      <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--nova),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;cursor:pointer;" title="Ashok">A</div>
+    </div>
+  </div>
+  <!-- Body -->
+  <div class="dash-body">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-sidebar-label">Workspace</div>
+      <div class="dash-nav-item active"><span class="nav-icon">🏠</span> Home</div>
+      <div class="dash-nav-item"><span class="nav-icon">📁</span> Projects</div>
+      <div class="dash-nav-item"><span class="nav-icon">⭐</span> Starred</div>
+      <div class="dash-nav-item"><span class="nav-icon">📦</span> Templates</div>
+      <div class="dash-sidebar-label">Build</div>
+      <div class="dash-nav-item" onclick="openNewProj()"><span class="nav-icon">🌐</span> New Web App</div>
+      <div class="dash-nav-item" onclick="openNewProj()"><span class="nav-icon">📱</span> New Mobile App</div>
+      <div class="dash-nav-item" onclick="openNewProj()"><span class="nav-icon">🎮</span> New Game</div>
+      <div class="dash-nav-item" onclick="openNewProj()"><span class="nav-icon">🤖</span> New AI Agent</div>
+      <div class="dash-sidebar-label">Account</div>
+      <div class="dash-nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      <div class="dash-nav-item"><span class="nav-icon">💳</span> Billing</div>
+      <div class="dash-nav-item" onclick="goScreen('s-landing')"><span class="nav-icon">🚪</span> Log out</div>
+    </aside>
+    <!-- Main -->
+    <main class="dash-main">
+      <div class="dash-section-title">Good morning, Ashok 👋</div>
+      <div class="dash-section-sub">What are you building today?</div>
+      <!-- New project banner -->
+      <div class="new-proj-banner">
+        <div class="new-proj-text">
+          <h3>Start a new project with AI</h3>
+          <p>Describe what you want and Nova AI will generate the full codebase — choose web, mobile, or game</p>
+        </div>
+        <button class="btn btn-primary" onclick="openNewProj()">+ New Project</button>
+      </div>
+      <!-- Recent projects -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">Recent Projects</div>
+      <div class="proj-grid">
+        <div class="proj-card" onclick="goIDE()">
+          <div class="proj-card-thumb" style="background:linear-gradient(135deg,rgba(108,99,255,.3),rgba(34,211,238,.15));">🌐</div>
+          <div class="proj-card-body">
+            <div class="proj-card-name">AIDesignSutra</div>
+            <div class="proj-card-meta"><span>Updated 2h ago</span><span>·</span><span>React</span></div>
+            <div class="proj-card-tags"><span class="proj-tag" style="background:rgba(34,211,238,.1);color:var(--cyan);">Web</span><span class="proj-tag" style="background:rgba(108,99,255,.1);color:var(--nova-l);">Live</span></div>
+          </div>
+        </div>
+        <div class="proj-card" onclick="goIDE()">
+          <div class="proj-card-thumb" style="background:linear-gradient(135deg,rgba(16,185,129,.25),rgba(34,211,238,.1));">📱</div>
+          <div class="proj-card-body">
+            <div class="proj-card-name">VideoSutra App</div>
+            <div class="proj-card-meta"><span>Updated 1d ago</span><span>·</span><span>Flutter</span></div>
+            <div class="proj-card-tags"><span class="proj-tag" style="background:rgba(16,185,129,.1);color:var(--green);">Mobile</span><span class="proj-tag" style="background:rgba(245,158,11,.1);color:var(--amber);">Draft</span></div>
+          </div>
+        </div>
+        <div class="proj-card" onclick="goIDE()">
+          <div class="proj-card-thumb" style="background:linear-gradient(135deg,rgba(245,158,11,.25),rgba(249,115,22,.15));">🎮</div>
+          <div class="proj-card-body">
+            <div class="proj-card-name">CryptoPaw Game</div>
+            <div class="proj-card-meta"><span>Updated 3d ago</span><span>·</span><span>Phaser.js</span></div>
+            <div class="proj-card-tags"><span class="proj-tag" style="background:rgba(245,158,11,.1);color:var(--amber);">Game</span><span class="proj-tag" style="background:rgba(108,99,255,.1);color:var(--nova-l);">Live</span></div>
+          </div>
+        </div>
+        <div class="proj-card" onclick="goIDE()">
+          <div class="proj-card-thumb" style="background:linear-gradient(135deg,rgba(244,63,94,.2),rgba(168,85,247,.15));">🤖</div>
+          <div class="proj-card-body">
+            <div class="proj-card-name">Prompt Engine API</div>
+            <div class="proj-card-meta"><span>Updated 5d ago</span><span>·</span><span>Python</span></div>
+            <div class="proj-card-tags"><span class="proj-tag" style="background:rgba(108,99,255,.1);color:var(--nova-l);">AI</span><span class="proj-tag" style="background:rgba(16,185,129,.1);color:var(--green);">Live</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Template library -->
+      <div style="font-size:.78rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;">Quick Templates</div>
+      <div class="template-row">
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(34,211,238,.1));">⚛️</div><div class="template-name">React SPA</div><div class="template-type">Web · JavaScript</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(34,211,238,.1));">🐦</div><div class="template-name">Flutter App</div><div class="template-type">Mobile · Dart</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(249,115,22,.1));">👾</div><div class="template-name">Phaser Game</div><div class="template-type">Game · JavaScript</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(108,99,255,.1));">🐍</div><div class="template-name">FastAPI Backend</div><div class="template-type">API · Python</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(244,63,94,.1));">🕹</div><div class="template-name">Godot 2D</div><div class="template-type">Game · GDScript</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(168,85,247,.15));">⚡</div><div class="template-name">Next.js App</div><div class="template-type">Web · TypeScript</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(245,158,11,.1));">🍎</div><div class="template-name">SwiftUI App</div><div class="template-type">iOS · Swift</div></div>
+        <div class="template-card" onclick="openNewProj()"><div class="template-thumb" style="background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(108,99,255,.1));">🤖</div><div class="template-name">LangChain Agent</div><div class="template-type">AI · Python</div></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 4: MAIN IDE (3 PANELS)
+══════════════════════════════════════ -->
+<div class="screen" id="s-ide">
+  <!-- IDE Header -->
+  <header class="ide-header">
+    <!-- Logo — no Replit branding -->
+    <div class="ide-logo" onclick="goScreen('s-dashboard')">
+      <svg width="22" height="22" viewBox="0 0 36 36" fill="none"><polygon points="18,2 31,9.5 31,26.5 18,34 5,26.5 5,9.5" stroke="url(#nh1)" stroke-width="2" fill="rgba(108,99,255,0.1)"/><circle cx="18" cy="18" r="5" fill="url(#nh2)"/><circle cx="18" cy="5" r="2" fill="#6C63FF" opacity=".7"/><defs><linearGradient id="nh1" x1="5" y1="2" x2="31" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient><linearGradient id="nh2" x1="13" y1="13" x2="23" y2="23"><stop stop-color="#9C95FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs></svg>
+      <span>Nova</span>
+    </div>
+
+    <!-- Project pill -->
+    <div class="project-pill" id="proj-pill">
+      <div class="proj-type-dot" id="proj-type-dot" style="background:var(--cyan);"></div>
+      <span id="proj-pill-name">nova-app</span>
+      <span style="color:var(--t3);font-size:.72rem;">▾</span>
+    </div>
+
+    <!-- Language selector -->
+    <div class="selector-group">
+      <div style="font-size:.7rem;color:var(--t3);">Lang:</div>
+      <div id="lang-pills" style="display:flex;gap:4px;"></div>
+    </div>
+
+    <!-- Target selector -->
+    <div class="selector-group" style="border-left:1px solid var(--border);padding-left:10px;">
+      <div style="font-size:.7rem;color:var(--t3);">Target:</div>
+      <div id="target-pills" style="display:flex;gap:4px;"></div>
+    </div>
+
+    <!-- Panel toggles -->
+    <div class="panel-toggles" id="panel-toggles">
+      <div class="panel-toggle on" id="tog-prompt" onclick="togglePanel('prompt')">💬 Prompt</div>
+      <div class="panel-toggle on" id="tog-code" onclick="togglePanel('code')">⌨ Code</div>
+      <div class="panel-toggle on" id="tog-preview" onclick="togglePanel('preview')">👁 Preview</div>
+    </div>
+
+    <div class="ide-header-right">
+      <div class="status-badge"><div class="status-dot"></div><span id="ai-status-label">Ready</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="saveAll()">Save</button>
+      <button class="btn btn-green btn-sm" onclick="runCode()">▶ Run</button>
+      <button class="btn btn-primary btn-sm" onclick="deployCode()">🚀 Deploy</button>
+      <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--nova),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;" title="Ashok">A</div>
+    </div>
+  </header>
+
+  <!-- IDE Body — 3 panels -->
+  <div class="ide-body">
+
+    <!-- ── PANEL 1: PROMPT ── -->
+    <div id="panel-prompt">
+      <div class="panel-head">
+        <span class="panel-head-title">Nova AI</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn-icon" onclick="addFileCtx()" title="Add current file to context">📄</button>
+          <button class="btn-icon" onclick="addAllCtx()" title="Add all files">📁</button>
+          <button class="btn-icon" onclick="document.getElementById('img-up').click()" title="Attach image">🖼</button>
+        </div>
+      </div>
+      <!-- Mode tabs -->
+      <div class="prompt-mode-tabs">
+        <div class="pm-tab active" id="pmt-copilot" onclick="setPromptMode('copilot')">Co-pilot</div>
+        <div class="pm-tab" id="pmt-agent" onclick="setPromptMode('agent')">Agent</div>
+        <div class="pm-tab" id="pmt-wireframe" onclick="setPromptMode('wireframe')">Wireframe</div>
+      </div>
+
+      <!-- Chat -->
+      <div class="chat-msgs" id="chat-msgs">
+        <div class="cmsg">
+          <div class="cmsg-av av-ai">N</div>
+          <div class="cmsg-body">
+            <strong>Nova AI ready.</strong><br><br>
+            I can see your code and generate, refactor, or debug across all files. I support images too.<br><br>
+            Switch to <strong>Agent</strong> mode to let me autonomously edit multiple files, or <strong>Wireframe</strong> to generate UI layouts from a description.
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent panel -->
+      <div class="agent-msgs" id="agent-msgs"></div>
+
+      <!-- Context bar -->
+      <div class="ctx-bar" id="ctx-bar">
+        <span style="font-size:.65rem;color:var(--t3);white-space:nowrap;">Context:</span>
+        <div id="ctx-chips" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
+      </div>
+
+      <!-- Co-pilot input -->
+      <div class="prompt-input-area" id="copilot-input">
+        <textarea class="prompt-textarea" id="prompt-box" placeholder="Ask Nova AI… (Enter to send)" onkeydown="onPromptKey(event)"></textarea>
+        <div class="prompt-actions-row">
+          <button class="pa-icon" onclick="document.getElementById('img-up').click()" title="Image">🖼</button>
+          <button class="pa-icon" onclick="addFileCtx()" title="Add file">📄</button>
+          <button class="send-btn" id="send-btn" onclick="sendChat()">Send ↑</button>
+        </div>
+      </div>
+
+      <!-- Agent input -->
+      <div class="agent-input-area" id="agent-input">
+        <textarea class="agent-textarea" id="agent-box" placeholder="Describe your goal… e.g. 'Add a dark mode toggle to the whole app'"></textarea>
+        <button class="agent-run" id="agent-run-btn" onclick="runAgent()">🤖 Unleash Agent</button>
+      </div>
+
+      <!-- Wireframe input -->
+      <div class="agent-input-area" id="wireframe-input">
+        <textarea class="agent-textarea" id="wireframe-box" placeholder="Describe a UI to wireframe… e.g. 'Login page with email, password, Google button and forgot password link'"></textarea>
+        <button class="agent-run" style="background:linear-gradient(135deg,var(--cyan),var(--nova));" onclick="runWireframe()">✏️ Generate Wireframe</button>
+      </div>
+    </div>
+
+    <!-- ── PANEL 2: CODE ── -->
+    <div id="panel-code">
+      <div class="editor-tabs" id="editor-tabs"></div>
+      <div class="editor-main">
+        <div class="line-nums" id="line-nums">1</div>
+        <textarea id="code-editor" spellcheck="false" onkeydown="onEditorKey(event)" oninput="onEditorInput()"></textarea>
+      </div>
+      <div class="editor-statusbar">
+        <div class="st-item"><div class="status-dot"></div><span>Connected</span></div>
+        <span id="st-file">—</span>
+        <select class="lang-select" id="lang-select-inline" onchange="onLangChange(this.value)">
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="py">Python</option>
+          <option value="dart">Dart</option>
+          <option value="swift">Swift</option>
+          <option value="kt">Kotlin</option>
+          <option value="lua">Lua</option>
+          <option value="gd">GDScript</option>
+          <option value="json">JSON</option>
+        </select>
+        <span id="st-lines">0 lines</span>
+        <span style="margin-left:auto;font-size:.68rem;opacity:.7;" id="st-agent"></span>
+      </div>
+    </div>
+
+    <!-- ── PANEL 3: PREVIEW ── -->
+    <div id="panel-preview">
+      <div class="preview-head">
+        <div class="preview-device-tabs">
+          <div class="dev-tab active" id="dev-desktop" onclick="setDevice('desktop')">🖥</div>
+          <div class="dev-tab" id="dev-mobile" onclick="setDevice('mobile')">📱</div>
+          <div class="dev-tab" id="dev-tablet" onclick="setDevice('tablet')">📋</div>
+        </div>
+        <input class="preview-url" id="preview-url" value="localhost:3000" readonly>
+        <button class="btn-icon" onclick="refreshPreview()" title="Refresh">↺</button>
+        <button class="btn-icon" onclick="openFullscreen()" title="Fullscreen">⛶</button>
+      </div>
+      <div class="preview-frame" id="preview-frame-wrap">
+        <div class="preview-iframe-wrap" id="preview-wrap">
+          <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </div>
+      <div class="preview-status">
+        <span id="pv-status">Ready</span>
+        <span id="pv-size">Desktop</span>
+        <span style="margin-left:auto;" id="pv-time"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     NEW PROJECT MODAL
+══════════════════════════════════════ -->
+<div class="modal-bg" id="new-proj-modal">
+  <div class="modal-box">
+    <h2>New Project</h2>
+    <div class="modal-sub">Choose a project type, language stack, and give it a name.</div>
+
+    <div class="modal-section-title">Project Type</div>
+    <div class="type-grid" id="modal-type-grid">
+      <div class="type-card sel" data-type="web" onclick="selectModalType(this,'web')"><div class="type-card-icon">🌐</div><div class="type-card-name">Web App</div><div class="type-card-sub">Browser</div></div>
+      <div class="type-card" data-type="mobile" onclick="selectModalType(this,'mobile')"><div class="type-card-icon">📱</div><div class="type-card-name">Mobile</div><div class="type-card-sub">iOS & Android</div></div>
+      <div class="type-card" data-type="game" onclick="selectModalType(this,'game')"><div class="type-card-icon">🎮</div><div class="type-card-name">Game</div><div class="type-card-sub">2D & 3D</div></div>
+      <div class="type-card" data-type="ai" onclick="selectModalType(this,'ai')"><div class="type-card-icon">🤖</div><div class="type-card-name">AI Agent</div><div class="type-card-sub">LLM App</div></div>
+    </div>
+
+    <div class="modal-section-title" style="margin-top:4px;">Language / Stack</div>
+    <div class="lang-grid" id="modal-lang-grid"></div>
+
+    <div class="modal-section-title">Project Name</div>
+    <div class="proj-name-row">
+      <input class="proj-name-input" id="proj-name-input" type="text" placeholder="my-nova-app" value="nova-app">
+      <button class="btn btn-primary" onclick="createProject()">Create →</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="img-up" accept="image/*" onchange="onImgUpload(event)">
+<input type="file" id="code-up" accept="*" onchange="onCodeUpload(event)">
+
+<div id="toasts"></div>
+
+<script>
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
+let curScreen = 's-landing';
+let curMode = 'copilot'; // copilot | agent | wireframe
+let curDevice = 'desktop';
+let curFile = null;
+let openTabs = [];
+let ctxFiles = [];
+let attachedImgs = [];
+let chatHistory = [];
+let curLang = 'html';
+let curTargetType = 'web';
+let panelStates = { prompt: true, code: true, preview: true };
+
+const LANG_STACKS = {
+  web:    [{ id:'html',  label:'HTML/CSS/JS', emoji:'🌐' },{ id:'js', label:'JavaScript', emoji:'⚡' },{ id:'ts', label:'TypeScript', emoji:'💙' },{ id:'react', label:'React', emoji:'⚛️' },{ id:'vue', label:'Vue', emoji:'💚' },{ id:'py', label:'Python', emoji:'🐍' },{ id:'go', label:'Go', emoji:'🐹' }],
+  mobile: [{ id:'dart',  label:'Flutter/Dart', emoji:'🐦' },{ id:'kt', label:'Kotlin', emoji:'🤖' },{ id:'swift', label:'Swift', emoji:'🍎' },{ id:'rn', label:'React Native', emoji:'⚛️' }],
+  game:   [{ id:'js', label:'Phaser.js', emoji:'👾' },{ id:'lua', label:'Lua', emoji:'🌙' },{ id:'gd', label:'GDScript', emoji:'🎮' },{ id:'cs', label:'C# / Unity', emoji:'🎯' },{ id:'cpp', label:'C++', emoji:'⚙️' }],
+  ai:     [{ id:'py', label:'Python', emoji:'🐍' },{ id:'js', label:'Node.js', emoji:'⚡' },{ id:'ts', label:'TypeScript', emoji:'💙' }],
+};
+
+const TYPE_COLORS = { web: '#22D3EE', mobile: '#10B981', game: '#F59E0B', ai: '#9C95FF', api: '#F97316' };
+
+const EXT_EMOJI = { html:'🌐', css:'🎨', js:'⚡', ts:'💙', py:'🐍', dart:'🐦', swift:'🍎', kt:'🤖', lua:'🌙', gd:'🎮', json:'📋', md:'📝' };
+
+const FS = {
+  'index.html': { ext:'html', lang:'HTML', mod:false, aiMod:false,
+    content:`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Nova App</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Build with AI</h2>
+      <p>Prompt, code, and ship — all in one place.</p>
+      <button onclick="handleCTA()">Get Started</button>
+    </section>
+  </main>
+  <script src="app.js"><\/script>
+</body>
+</html>` },
+  'style.css': { ext:'css', lang:'CSS', mod:false, aiMod:false,
+    content:`/* Nova App Styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #0D0D18; color: #F1F1FF; }
+header { background: #111120; border-bottom: 1px solid rgba(255,255,255,.08); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+header h1 { font-size: 1.3rem; font-weight: 700; color: #9C95FF; }
+nav a { color: #A0A0C0; text-decoration: none; margin-left: 20px; font-size: .9rem; }
+nav a:hover { color: #F1F1FF; }
+.hero { max-width: 700px; margin: 80px auto; padding: 0 24px; text-align: center; }
+.hero h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #9C95FF, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { color: #A0A0C0; font-size: 1.05rem; margin-bottom: 28px; }
+.hero button { padding: 12px 28px; background: #6C63FF; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.hero button:hover { background: #9C95FF; }` },
+  'app.js': { ext:'js', lang:'JavaScript', mod:false, aiMod:false,
+    content:`// Nova App — Main Script
+console.log('Nova App ready');
+
+function handleCTA() {
+  alert('Built with Nova Galaxy OS ✦');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded');
+});` },
+  'package.json': { ext:'json', lang:'JSON', mod:false, aiMod:false,
+    content:`{
+  "name": "nova-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}` },
+};
+
+// ════════════════════════════════════════════════════
+// SCREEN NAVIGATION
+// ════════════════════════════════════════════════════
+function goScreen(id) {
+  document.getElementById(curScreen)?.classList.remove('active');
+  document.getElementById(id)?.classList.add('active');
+  curScreen = id;
+}
+function goAuth(tab) { goScreen('s-auth'); switchAuthTab(tab); }
+function goDashboard() { goScreen('s-dashboard'); toast('Welcome back, Ashok! 👋','info'); }
+function goIDE() { goScreen('s-ide'); initIDE(); }
+function selectType(type, el) {
+  document.querySelectorAll('.plat-card').forEach(c => c.classList.remove('active-type'));
+  el.classList.add('active-type'); curTargetType = type;
+}
+
+// ════════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════════
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('auth-form-login').classList.add('hidden');
+  document.getElementById('auth-form-register').classList.add('hidden');
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('auth-form-'+tab).classList.remove('hidden');
+}
+
+// ════════════════════════════════════════════════════
+// NEW PROJECT MODAL
+// ════════════════════════════════════════════════════
+let modalType = 'web';
+function openNewProj() { renderModalLangs('web'); document.getElementById('new-proj-modal').classList.add('open'); }
+function closeModal() { document.getElementById('new-proj-modal').classList.remove('open'); }
+document.getElementById('new-proj-modal').addEventListener('click', e => { if(e.target.id==='new-proj-modal') closeModal(); });
+
+function selectModalType(el, type) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel'); modalType = type; renderModalLangs(type);
+}
+function renderModalLangs(type) {
+  const grid = document.getElementById('modal-lang-grid');
+  const langs = LANG_STACKS[type] || LANG_STACKS.web;
+  grid.innerHTML = '';
+  langs.forEach((l,i) => {
+    const d = document.createElement('div');
+    d.className = 'lang-pill' + (i===0?' sel':'');
+    d.innerHTML = `<span class="lang-emoji">${l.emoji}</span>${l.label}`;
+    d.onclick = () => { document.querySelectorAll('.lang-pill').forEach(p=>p.classList.remove('sel')); d.classList.add('sel'); curLang=l.id; };
+    if(i===0) curLang=l.id;
+    grid.appendChild(d);
+  });
+}
+function createProject() {
+  const name = document.getElementById('proj-name-input').value.trim() || 'nova-app';
+  closeModal(); goIDE();
+  document.getElementById('proj-pill-name').textContent = name;
+  document.getElementById('proj-type-dot').style.background = TYPE_COLORS[modalType] || TYPE_COLORS.web;
+  toast(`Project "${name}" created ✦`,'info');
+  setTimeout(() => renderIDELangPills(), 100);
+}
+
+// ════════════════════════════════════════════════════
+// IDE INIT
+// ════════════════════════════════════════════════════
+function initIDE() {
+  renderTree(); renderTabs(); openFile('index.html'); renderIDELangPills(); renderPreview();
+}
+function renderIDELangPills() {
+  const langs = LANG_STACKS[curTargetType] || LANG_STACKS.web;
+  const lp = document.getElementById('lang-pills');
+  lp.innerHTML = '';
+  langs.slice(0,4).forEach((l,i) => {
+    const d = document.createElement('div');
+    d.className = 'sel-pill' + (i===0?' active':'');
+    d.innerHTML = l.emoji + ' ' + l.label;
+    d.onclick = () => { document.querySelectorAll('#lang-pills .sel-pill').forEach(p=>p.classList.remove('active')); d.classList.add('active'); curLang=l.id; toast('Language: '+l.label,'info'); };
+    lp.appendChild(d);
+  });
+  const targets = [{id:'web',e:'🌐'},{id:'mobile',e:'📱'},{id:'game',e:'🎮'}];
+  const tp = document.getElementById('target-pills');
+  tp.innerHTML = '';
+  targets.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'sel-pill' + (t.id===curTargetType?' active':'');
+    d.innerHTML = t.e + ' ' + t.id;
+    d.onclick = () => { document.querySelectorAll('#target-pills .sel-pill').forEach(p=>p.classList.remove('active')); d.classList.add('active'); curTargetType=t.id; renderIDELangPills(); toast('Target: '+t.id,'info'); };
+    tp.appendChild(d);
+  });
+}
+
+// ════════════════════════════════════════════════════
+// FILE SYSTEM
+// ════════════════════════════════════════════════════
+function renderTree() {
+  // No separate sidebar tree in this layout — tabs are enough
+}
+function openFile(name) {
+  if(!FS[name]) return;
+  if(curFile && FS[curFile]) FS[curFile].content = document.getElementById('code-editor').value;
+  curFile = name;
+  if(!openTabs.includes(name)) openTabs.push(name);
+  if(!ctxFiles.includes(name)) { ctxFiles.push(name); renderCtx(); }
+  renderTabs();
+  const ed = document.getElementById('code-editor');
+  ed.value = FS[name].content;
+  document.getElementById('st-file').textContent = name;
+  document.getElementById('lang-select-inline').value = FS[name].ext;
+  updateLineNums();
+}
+function renderTabs() {
+  const tabs = document.getElementById('editor-tabs');
+  tabs.innerHTML = '';
+  openTabs.forEach(name => {
+    if(!FS[name]) return;
+    const d = document.createElement('div');
+    d.className = 'etab' + (curFile===name?' active':'');
+    const em = EXT_EMOJI[FS[name].ext] || '📄';
+    const dot = FS[name].mod ? ' ●' : (FS[name].aiMod ? ' ✦' : '');
+    d.innerHTML = `<span class="ext-${FS[name].ext}">${em}</span><span>${name}${dot}</span><span class="etab-close" onclick="closeTab(event,'${name}')">✕</span>`;
+    d.onclick = (e) => { if(!e.target.classList.contains('etab-close')) openFile(name); };
+    tabs.appendChild(d);
+  });
+  // Add file button
+  const add = document.createElement('div');
+  add.className = 'etab'; add.style.cssText='opacity:.5;min-width:36px;';
+  add.innerHTML='<span title="New file">+</span>';
+  add.onclick = () => { const n=prompt('File name:','component.js'); if(n){const ext=n.split('.').pop();FS[n]={ext,lang:ext.toUpperCase(),content:'',mod:false,aiMod:false};openFile(n);} };
+  tabs.appendChild(add);
+}
+function closeTab(e, name) {
+  e.stopPropagation();
+  openTabs = openTabs.filter(t=>t!==name);
+  ctxFiles = ctxFiles.filter(c=>c!==name);
+  if(curFile===name) { curFile=openTabs[openTabs.length-1]||null; if(curFile)openFile(curFile); }
+  renderTabs(); renderCtx();
+}
+function onEditorInput() {
+  if(!curFile) return;
+  FS[curFile].content = document.getElementById('code-editor').value;
+  FS[curFile].mod = true;
+  updateLineNums(); renderTabs();
+}
+function onEditorKey(e) {
+  if(e.key==='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart;t.value=t.value.substring(0,s)+'  '+t.value.substring(t.selectionEnd);t.selectionStart=t.selectionEnd=s+2;onEditorInput();}
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveAll();}
+}
+function updateLineNums() {
+  const lines = document.getElementById('code-editor').value.split('\n').length;
+  document.getElementById('line-nums').textContent = Array.from({length:lines},(_,i)=>i+1).join('\n');
+  document.getElementById('st-lines').textContent = lines + ' lines';
+}
+function saveAll() { if(!curFile)return; FS[curFile].content=document.getElementById('code-editor').value; FS[curFile].mod=false; renderTabs(); toast('Saved','info'); }
+function onLangChange(val) { if(curFile) { FS[curFile].ext=val; FS[curFile].lang=val.toUpperCase(); renderTabs(); } }
+function onCodeUpload(e) { const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const ext=f.name.split('.').pop();FS[f.name]={ext,lang:ext.toUpperCase(),content:ev.target.result,mod:false,aiMod:false};openFile(f.name);toast('Uploaded '+f.name,'info')};r.readAsText(f);e.target.value=''; }
+
+// ════════════════════════════════════════════════════
+// PANEL TOGGLES
+// ════════════════════════════════════════════════════
+function togglePanel(name) {
+  panelStates[name] = !panelStates[name];
+  const el = document.getElementById('panel-'+name);
+  const tog = document.getElementById('tog-'+name);
+  if(panelStates[name]) { el.classList.remove('closed'); tog.classList.add('on'); }
+  else { el.classList.add('closed'); tog.classList.remove('on'); }
+}
+
+// ════════════════════════════════════════════════════
+// DEVICE
+// ════════════════════════════════════════════════════
+function setDevice(dev) {
+  curDevice=dev;
+  document.querySelectorAll('.dev-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('dev-'+dev).classList.add('active');
+  const wrap = document.getElementById('preview-wrap');
+  wrap.className = 'preview-iframe-wrap' + (dev==='mobile'?' mobile':'');
+  document.getElementById('pv-size').textContent = dev.charAt(0).toUpperCase()+dev.slice(1);
+}
+
+// ════════════════════════════════════════════════════
+// PREVIEW
+// ════════════════════════════════════════════════════
+function renderPreview() {
+  if(curFile) FS[curFile].content = document.getElementById('code-editor').value;
+  const html = FS['index.html']?.content || '';
+  const css = FS['style.css']?.content || '';
+  const js = FS['app.js']?.content || '';
+  const src = html
+    .replace('</head>', `<style>${css}</style></head>`)
+    .replace('</body>', `<script>${js.replace(/<\/script>/g,'<\\/script>')}<\/script></body>`);
+  try {
+    const frame = document.getElementById('preview-frame');
+    frame.srcdoc = src;
+    const now = new Date(); document.getElementById('pv-time').textContent = now.toLocaleTimeString();
+    document.getElementById('pv-status').textContent = 'Running';
+  } catch(e) {}
+}
+function runCode() { if(curFile) FS[curFile].content=document.getElementById('code-editor').value; renderPreview(); toast('Running…','info'); }
+function refreshPreview() { renderPreview(); }
+function deployCode() { toast('Deploying to Nova Edge Network…','info'); }
+function openFullscreen() { const f=document.getElementById('preview-frame');if(f.requestFullscreen)f.requestFullscreen(); }
+
+// ════════════════════════════════════════════════════
+// CONTEXT
+// ════════════════════════════════════════════════════
+function renderCtx() {
+  const chips = document.getElementById('ctx-chips'); chips.innerHTML='';
+  ctxFiles.forEach(n=>{const c=document.createElement('div');c.className='ctx-c ctx-file';c.innerHTML=`${EXT_EMOJI[FS[n]?.ext]||'📄'} ${n} <span class="ctx-rm" onclick="removeCtx('${n}')">✕</span>`;chips.appendChild(c);});
+  attachedImgs.forEach((img,i)=>{const c=document.createElement('div');c.className='ctx-c ctx-img';c.innerHTML=`🖼 ${img.name} <span class="ctx-rm" onclick="removeImg(${i})">✕</span>`;chips.appendChild(c);});
+}
+function removeCtx(n){ctxFiles=ctxFiles.filter(f=>f!==n);renderCtx();}
+function removeImg(i){attachedImgs.splice(i,1);renderCtx();}
+function addFileCtx(){if(curFile&&!ctxFiles.includes(curFile)){ctxFiles.push(curFile);renderCtx();toast('Added '+curFile+' to context','info');}}
+function addAllCtx(){Object.keys(FS).forEach(n=>{if(!ctxFiles.includes(n))ctxFiles.push(n)});renderCtx();toast('All files in context','info');}
+function onImgUpload(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{attachedImgs.push({name:f.name,dataUrl:ev.target.result,base64:ev.target.result.split(',')[1],type:f.type});renderCtx();toast('Image: '+f.name,'info');};r.readAsDataURL(f);e.target.value='';}
+
+// ════════════════════════════════════════════════════
+// PROMPT MODE
+// ════════════════════════════════════════════════════
+function setPromptMode(mode) {
+  curMode=mode;
+  document.querySelectorAll('.pm-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pmt-'+mode).classList.add('active');
+  document.getElementById('chat-msgs').style.display = mode==='copilot'?'flex':'none';
+  document.getElementById('agent-msgs').style.display = mode==='agent'?'flex':'none';
+  document.getElementById('copilot-input').style.display = mode==='copilot'?'flex':'none';
+  document.getElementById('agent-input').style.display = mode==='agent'?'flex':'none';
+  document.getElementById('wireframe-input').style.display = mode==='wireframe'?'flex':'none';
+  if(mode==='wireframe') document.getElementById('chat-msgs').style.display='flex';
+}
+
+// ════════════════════════════════════════════════════
+// SYSTEM PROMPT
+// ════════════════════════════════════════════════════
+function buildSysPrompt(mode) {
+  let s = `You are Nova AI, an expert full-stack engineer embedded in Nova Galaxy OS — an advanced AI coding platform combining the best of Replit, Lovable, Emergent, and Thunkable.\n\n`;
+  s += `Target: ${curTargetType.toUpperCase()} | Language: ${curLang.toUpperCase()} | Mode: ${mode.toUpperCase()}\n\n`;
+  if(mode==='agent') {
+    s += `You are an autonomous agent. Respond ONLY in this exact JSON (no other text):\n{"plan":"brief plan","steps":[{"file":"filename","action":"create|edit|delete","description":"what","diff":"complete new file content"}],"summary":"what was done"}\n\n`;
+  } else if(mode==='wireframe') {
+    s += `You are a UI wireframe generator. When asked to wireframe a UI, produce clean HTML+CSS wireframe code using only greys (#333, #555, #888, #ddd, #eee, #f5f5f5) — no colors. Use placeholder boxes, dashed borders, and annotation labels. Wrap the result in:\n\`\`\`html\n[wireframe HTML here]\n\`\`\`\n\n`;
+  } else {
+    s += `Co-pilot mode: Be concise. Show code in triple backticks with language tag. Specify the filename. Show only the changed section.\n\n`;
+  }
+  if(ctxFiles.length) {
+    s += `## Context Files\n`;
+    ctxFiles.forEach(n => { if(FS[n]) s += `\n### ${n}\n\`\`\`${FS[n].ext}\n${FS[n].content.substring(0,2500)}\n\`\`\`\n`; });
+  }
+  s += `\nCurrent file: ${curFile||'none'} | All files: ${Object.keys(FS).join(', ')}\n`;
+  return s;
+}
+
+// ════════════════════════════════════════════════════
+// CHAT RENDERING
+// ════════════════════════════════════════════════════
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function detectFile(lang,code){if(lang==='html'||code.includes('<!DOCTYPE'))return'index.html';if(lang==='css')return'style.css';if(lang==='json'||code.trim().startsWith('{'))return'package.json';return curFile||'app.js';}
+function applyCode(code,filename){
+  if(!FS[filename]){const ext=filename.split('.').pop();FS[filename]={ext,lang:ext.toUpperCase(),content:'',mod:false,aiMod:false};}
+  FS[filename].content=code;FS[filename].mod=true;FS[filename].aiMod=true;
+  if(!openTabs.includes(filename))openTabs.push(filename);
+  openFile(filename);renderPreview();toast(`✦ Applied to ${filename}`,'info');
+}
+function applyWireframe(code, filename) {
+  filename = filename || 'wireframe.html';
+  if(!FS[filename]){FS[filename]={ext:'html',lang:'HTML',content:'',mod:false,aiMod:false};}
+  FS[filename].content=code;FS[filename].mod=true;FS[filename].aiMod=true;
+  if(!openTabs.includes(filename))openTabs.push(filename);
+  openFile(filename);
+  // render wireframe in preview
+  document.getElementById('preview-frame').srcdoc=code;
+  toast('Wireframe rendered in preview','info');
+}
+function renderAIText(text) {
+  return text.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>{
+    const fname = detectFile(lang,code);
+    const isWire = curMode==='wireframe';
+    const btn = isWire
+      ? `<span class="apply-btn" onclick="applyWireframe(${JSON.stringify(code.trim())}, 'wireframe.html')">✏️ Render Wireframe</span>`
+      : `<span class="apply-btn" onclick="applyCode(${JSON.stringify(code.trim())}, ${JSON.stringify(fname)})">⚡ Apply to ${fname}</span>`;
+    return `<div class="cmsg-code">${esc(code.trim())}</div>${btn}`;
+  }).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');
+}
+function appendMsg(role, html) {
+  const msgs = document.getElementById('chat-msgs');
+  const d = document.createElement('div'); d.className='cmsg';
+  const isUser = role==='user';
+  d.innerHTML=`<div class="cmsg-av ${isUser?'av-user':'av-ai'}">${isUser?'U':'N'}</div><div class="cmsg-body ${isUser?'user':''}">${html}</div>`;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+  return d;
+}
+function addLoading() { return appendMsg('ai','<div class="typing-ind"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div><span style="margin-left:4px;font-size:.75rem;">Nova AI thinking…</span></div>'); }
+function onPromptKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+
+// ════════════════════════════════════════════════════
+// CO-PILOT CHAT
+// ════════════════════════════════════════════════════
+async function sendChat() {
+  const box = document.getElementById('prompt-box');
+  const text = box.value.trim();
+  if(!text&&!attachedImgs.length) return;
+  box.value=''; document.getElementById('send-btn').disabled=true;
+  if(curFile) FS[curFile].content=document.getElementById('code-editor').value;
+  appendMsg('user',esc(text).replace(/\n/g,'<br>'));
+  const userContent=[];
+  if(text) userContent.push({type:'text',text});
+  attachedImgs.forEach(img=>userContent.push({type:'image',source:{type:'base64',media_type:img.type,data:img.base64}}));
+  attachedImgs=[]; renderCtx();
+  chatHistory.push({role:'user',content:userContent.length===1&&userContent[0].type==='text'?text:userContent});
+  const load = addLoading();
+  document.getElementById('ai-status-label').textContent='Thinking…';
+  try {
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:buildSysPrompt(curMode),messages:chatHistory})});
+    const data=await resp.json();
+    load.remove();
+    const reply=data.content?.map(b=>b.text||'').join('')||'No response.';
+    chatHistory.push({role:'assistant',content:reply});
+    appendMsg('ai',renderAIText(reply));
+  } catch(err) {
+    load.remove();
+    appendMsg('ai',`<span style="color:var(--rose);">⚠ Error: ${err.message}</span>`);
+  }
+  document.getElementById('send-btn').disabled=false;
+  document.getElementById('ai-status-label').textContent='Ready';
+}
+
+// ════════════════════════════════════════════════════
+// WIREFRAME MODE
+// ════════════════════════════════════════════════════
+async function runWireframe() {
+  const box = document.getElementById('wireframe-box');
+  const text = box.value.trim();
+  if(!text) { toast('Describe a UI to wireframe','error'); return; }
+  box.value='';
+  // Switch to chat-msgs visible
+  document.getElementById('chat-msgs').style.display='flex';
+  appendMsg('user',esc(text));
+  const load = addLoading();
+  document.getElementById('ai-status-label').textContent='Wireframing…';
+  try {
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:buildSysPrompt('wireframe'),messages:[{role:'user',content:`Create a wireframe for: ${text}`}]})});
+    const data=await resp.json();
+    load.remove();
+    const reply=data.content?.map(b=>b.text||'').join('')||'';
+    appendMsg('ai',renderAIText(reply));
+    // Auto-extract and render any HTML wireframe
+    const hm = reply.match(/```html\n?([\s\S]*?)```/);
+    if(hm) applyWireframe(hm[1].trim(),'wireframe.html');
+  } catch(err) { load.remove(); appendMsg('ai',`<span style="color:var(--rose);">⚠ ${err.message}</span>`); }
+  document.getElementById('ai-status-label').textContent='Ready';
+}
+
+// ════════════════════════════════════════════════════
+// AGENT
+// ════════════════════════════════════════════════════
+async function runAgent() {
+  const goal = document.getElementById('agent-box').value.trim();
+  if(!goal){toast('Enter a goal for the agent','error');return;}
+  const btn=document.getElementById('agent-run-btn');
+  btn.disabled=true; btn.textContent='⏳ Running…';
+  document.getElementById('agent-msgs').innerHTML='';
+  document.getElementById('st-agent').textContent='🤖 Agent active';
+  document.getElementById('ai-status-label').textContent='Agent running…';
+  if(curFile) FS[curFile].content=document.getElementById('code-editor').value;
+  const amsg = document.getElementById('agent-msgs');
+  // Progress block
+  const prog=document.createElement('div');
+  prog.className='agent-prog';
+  prog.innerHTML=`<div class="ap-label" id="ap-label">Analyzing…</div><div class="ap-bar"><div class="ap-fill" id="ap-fill" style="width:5%"></div></div><div class="ap-sub" id="ap-sub">Bundling ${Object.keys(FS).length} files</div>`;
+  amsg.appendChild(prog); amsg.scrollTop=amsg.scrollHeight;
+  const setP=(pct,label,sub)=>{document.getElementById('ap-fill').style.width=pct+'%';document.getElementById('ap-label').textContent=label;document.getElementById('ap-sub').textContent=sub;};
+  setP(18,'Planning…','Building context'); await sleep(350);
+  try {
+    setP(38,'Calling Nova AI…',''); 
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:buildSysPrompt('agent'),messages:[{role:'user',content:`Goal: ${goal}\n\nProvide a complete plan and all file edits.`}]})});
+    const data=await resp.json();
+    const raw=data.content?.map(b=>b.text||'').join('')||'';
+    setP(62,'Parsing plan…',''); await sleep(250);
+    let plan=null;
+    const jm=raw.match(/```json\n?([\s\S]*?)```/)||raw.match(/\{[\s\S]*?"steps"[\s\S]*?\}/);
+    if(jm){try{plan=JSON.parse(jm[1]||jm[0]);}catch(e){}}
+    if(plan&&plan.steps){
+      const ph=document.createElement('div');ph.style.cssText='font-size:.78rem;color:var(--t2);padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:4px;';ph.innerHTML=`<strong style="color:var(--t1)">📋</strong> ${esc(plan.plan||'')}`;amsg.appendChild(ph);
+      setP(72,'Applying…','');
+      for(let i=0;i<plan.steps.length;i++){
+        const step=plan.steps[i]; await sleep(280);
+        setP(72+Math.round((i/plan.steps.length)*24),`Editing ${step.file}…`,step.description||'');
+        if(step.action==='create'||step.action==='edit'){const ext=step.file.split('.').pop();FS[step.file]={ext,lang:ext.toUpperCase(),content:step.diff||'',mod:true,aiMod:true};}
+        else if(step.action==='delete'){delete FS[step.file];openTabs=openTabs.filter(t=>t!==step.file);}
+        const card=document.createElement('div');card.className='agent-step';
+        const tagC={create:'badge-create',edit:'badge-edit',delete:'badge-delete'}[step.action]||'badge-edit';
+        card.innerHTML=`<div class="astep-head"><span class="astep-badge ${tagC}">${step.action}</span><span class="astep-file">${step.file}</span></div><div class="astep-desc">${esc(step.description||'')}</div><div class="astep-done">✓ Applied</div>`;
+        amsg.appendChild(card);amsg.scrollTop=amsg.scrollHeight;
+      }
+      setP(100,'Done!',''); await sleep(250);
+      const done=document.createElement('div');done.className='agent-done';done.innerHTML=`<strong style="color:var(--green)">✅ Agent complete</strong><br>${esc(plan.summary||'')}`;amsg.appendChild(done);
+      renderTabs(); if(curFile&&FS[curFile])openFile(curFile); else openFile(Object.keys(FS)[0]);
+      renderPreview(); toast(`🤖 ${plan.steps.length} file(s) updated`,'info');
+    } else {
+      // Fallback
+      setP(95,'Done','');
+      const fb=document.createElement('div');fb.className='agent-step';fb.innerHTML=`<div class="astep-head"><span class="astep-badge badge-edit">ANALYSIS</span></div><div class="astep-desc" style="margin-top:4px;">${renderAIText(raw)}</div>`;amsg.appendChild(fb);
+    }
+  } catch(err) {
+    prog.innerHTML+=`<div style="color:var(--rose);font-size:.75rem;margin-top:6px;">⚠ ${err.message}</div>`;
+    toast('Agent error','error');
+  }
+  btn.disabled=false; btn.textContent='🤖 Unleash Agent';
+  document.getElementById('st-agent').textContent='';
+  document.getElementById('ai-status-label').textContent='Ready';
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════
+function toast(msg, type='info') {
+  const icons={success:'✓',error:'✗',info:'✦'};
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.innerHTML=`<strong>${icons[type]||'✦'}</strong> ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(()=>el.remove(),300);},2800);
+}
+
+// ════════════════════════════════════════════════════
+// MISC
+// ════════════════════════════════════════════════════
+function shareProject(){toast('Share link copied!','info');}
+</script>
+</body>
+</html>
